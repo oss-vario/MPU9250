@@ -40,7 +40,7 @@ class MPU9250{
       ACCEL_RANGE_2G,
       ACCEL_RANGE_4G,
       ACCEL_RANGE_8G,
-      ACCEL_RANGE_16G    
+      ACCEL_RANGE_16G
     };
     enum DlpfBandwidth
     {
@@ -87,7 +87,7 @@ class MPU9250{
     float getMagY_uT();
     float getMagZ_uT();
     float getTemperature_C();
-    
+
     int calibrateGyro();
     float getGyroBiasX_rads();
     float getGyroBiasY_rads();
@@ -158,13 +158,16 @@ class MPU9250{
     uint8_t _srd;
     // gyro bias estimation
     size_t _numSamples = 100;
-    double _gxbD, _gybD, _gzbD;
-    float _gxb, _gyb, _gzb;
+
+    float _gxb = 0.0f;
+    float _gyb = 0.0f;
+    float _gzb = 0.0f;
     // accel bias and scale factor estimation
-    double _axbD, _aybD, _azbD;
-    float _axmax, _aymax, _azmax;
-    float _axmin, _aymin, _azmin;
-    float _axb, _ayb, _azb;
+
+    float _axb = 0.0f;
+    float _ayb = 0.0f;
+    float _azb = 0.0f;
+
     float _axs = 1.0f;
     float _ays = 1.0f;
     float _azs = 1.0f;
@@ -174,9 +177,8 @@ class MPU9250{
     uint8_t _coeff = 8;
     uint16_t _counter;
     float _framedelta, _delta;
-    float _hxfilt, _hyfilt, _hzfilt;
-    float _hxmax, _hymax, _hzmax;
-    float _hxmin, _hymin, _hzmin;
+
+
     float _hxb, _hyb, _hzb;
     float _hxs = 1.0f;
     float _hys = 1.0f;
@@ -184,7 +186,7 @@ class MPU9250{
     float _avgs;
     // transformation matrix
     /* transform the accel and gyro axes to match the magnetometer axes */
-    const int16_t tX[3] = {0,  1,  0}; 
+    const int16_t tX[3] = {0,  1,  0};
     const int16_t tY[3] = {1,  0,  0};
     const int16_t tZ[3] = {0,  0, -1};
     // constants
@@ -258,7 +260,7 @@ class MPU9250{
     const uint8_t FIFO_READ = 0x74;
     // AK8963 registers
     const uint8_t AK8963_I2C_ADDR = 0x0C;
-    const uint8_t AK8963_HXL = 0x03; 
+    const uint8_t AK8963_HXL = 0x03;
     const uint8_t AK8963_CNTL1 = 0x0A;
     const uint8_t AK8963_PWR_DOWN = 0x00;
     const uint8_t AK8963_CNT_MEAS1 = 0x12;
