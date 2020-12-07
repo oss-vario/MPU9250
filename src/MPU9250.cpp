@@ -702,8 +702,8 @@ the min and max values along each */
 int MPU9250::calibrateAccel() {
   double _axbD=0, _aybD=0, _azbD=0;
 
-  float _axmax, _aymax, _azmax;
-  float _axmin, _aymin, _azmin;
+  float _axmax = 0, _aymax = 0, _azmax = 0;
+  float _axmin = 0, _aymin = 0, _azmin = 0;
 
   // set the range, bandwidth, and srd
   if (setAccelRange(ACCEL_RANGE_2G) < 0) {
@@ -821,7 +821,7 @@ void MPU9250::setAccelCalZ(float bias,float scaleFactor) {
 /* finds bias and scale factor calibration for the magnetometer,
 the sensor should be rotated in a figure 8 motion until complete */
 int MPU9250::calibrateMag() {
-  float _hxfilt, _hyfilt, _hzfilt;
+  float _hxfilt = 0, _hyfilt = 0, _hzfilt = 0;
   float _hxmax, _hymax, _hzmax;
   float _hxmin, _hymin, _hzmin;
 
