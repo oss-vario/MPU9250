@@ -631,6 +631,12 @@ void MPU9250FIFO::getFifoTemperature_C(size_t *size,float* data) {
 int MPU9250::calibrateGyro() {
   double _gxbD = 0, _gybD = 0, _gzbD = 0;
   // set the range, bandwidth, and srd
+
+   // save to reset after calibration
+  const GyroRange saved_gyro_range = _gyroRange;
+  const DlpfBandwidth saved_bandwidth = _bandwidth;
+  const uint8_t saved_srd = _srd;
+
   if (setGyroRange(GYRO_RANGE_250DPS) < 0) {
     return -1;
   }
@@ -654,13 +660,13 @@ int MPU9250::calibrateGyro() {
   _gzb = (float)_gzbD;
 
   // set the range, bandwidth, and srd back to what they were
-  if (setGyroRange(_gyroRange) < 0) {
+  if (setGyroRange(saved_gyro_range) < 0) {
     return -4;
   }
-  if (setDlpfBandwidth(_bandwidth) < 0) {
+  if (setDlpfBandwidth(saved_bandwidth) < 0) {
     return -5;
   }
-  if (setSrd(_srd) < 0) {
+  if (setSrd(saved_srd) < 0) {
     return -6;
   }
   return 1;
@@ -704,6 +710,10 @@ int MPU9250::calibrateAccel() {
 
   float _axmax = 0, _aymax = 0, _azmax = 0;
   float _axmin = 0, _aymin = 0, _azmin = 0;
+   // save to reset after calibration
+  const AccelRange saved_accel_range = _accelRange;
+  const DlpfBandwidth saved_bandwidth = _bandwidth;
+  const uint8_t saved_srd = _srd;
 
   // set the range, bandwidth, and srd
   if (setAccelRange(ACCEL_RANGE_2G) < 0) {
@@ -758,13 +768,13 @@ int MPU9250::calibrateAccel() {
   }
 
   // set the range, bandwidth, and srd back to what they were
-  if (setAccelRange(_accelRange) < 0) {
+  if (setAccelRange(saved_accel_range) < 0) {
     return -4;
   }
-  if (setDlpfBandwidth(_bandwidth) < 0) {
+  if (setDlpfBandwidth(saved_bandwidth) < 0) {
     return -5;
   }
-  if (setSrd(_srd) < 0) {
+  if (setSrd(saved_srd) < 0) {
     return -6;
   }
   return 1;
@@ -824,6 +834,8 @@ int MPU9250::calibrateMag() {
   float _hxfilt = 0, _hyfilt = 0, _hzfilt = 0;
   float _hxmax, _hymax, _hzmax;
   float _hxmin, _hymin, _hzmin;
+   // save to reset after calibration
+  const uint8_t saved_srd = _srd;
 
   // set the srd
   if (setSrd(19) < 0) {
@@ -913,7 +925,7 @@ int MPU9250::calibrateMag() {
   _hzs = _avgs/_hzs;
 
   // set the srd back to what it was
-  if (setSrd(_srd) < 0) {
+  if (setSrd(saved_srd) < 0) {
     return -2;
   }
   return 1;
