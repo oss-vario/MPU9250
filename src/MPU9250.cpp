@@ -53,6 +53,10 @@ int MPU9250::begin(){
     // setting the I2C clock
     _i2c->setClock(_i2cRate);
   }
+
+  resetAccelBiasAndScaleFactor();
+  resetMagBiasAndScaleFactor();
+  resetGyroBias();
   // select clock source to gyro
   if(writeRegister(PWR_MGMNT_1,CLOCK_SEL_PLL) < 0){
     return -1;
@@ -647,6 +651,7 @@ int MPU9250::calibrateGyro() {
     return -3;
   }
 
+  resetGyroBias();
   int _numSamples = 1000;
   // take samples and calculate find bias
   for (size_t i=0; i < _numSamples; i++) {
@@ -729,6 +734,9 @@ int MPU9250::calibrateAccel() {
   }
 
   int _numSamples = 1000;
+
+  resetAccelBiasAndScaleFactor();
+
   // take samples and find min / max
   for (size_t i=0; i < _numSamples; i++) {
     readSensor();
@@ -847,6 +855,8 @@ int MPU9250::calibrateMag() {
   if (setSrd(19) < 0) {
     return -1;
   }
+
+  resetMagBiasAndScaleFactor();
 
   // get a starting set of data
   readSensor();
@@ -1119,4 +1129,35 @@ int MPU9250::whoAmIAK8963(){
   }
   // return the register value
   return _buffer[0];
+}
+
+void MPU9250::resetAccelBiasAndScaleFactor() {
+  // accel bias
+  _axb = 0.0f;
+  _ayb = 0.0f;
+  _azb = 0.0f;
+
+  // accel scale factor
+  _axs = 1.0f;
+  _ays = 1.0f;
+  _azs = 1.0f;
+}
+
+void MPU9250::resetMagBiasAndScaleFactor() {
+  // mag bias
+  _hxb = 0.0f;
+  _hyb = 0.0f;
+  _hzb = 0.0f;
+
+  // mag scale factor
+  _hxs = 1.0f;
+  _hys = 1.0f;
+  _hzs = 1.0f;
+}
+
+void MPU9250::resetGyroBias() {
+  // gyro bias
+  _gxb = 0.0f;
+  _gyb = 0.0f;
+  _gzb = 0.0f;
 }

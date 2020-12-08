@@ -161,33 +161,23 @@ class MPU9250{
     uint8_t _srd;
 
     // gyro bias
-    float _gxb = 0.0f;
-    float _gyb = 0.0f;
-    float _gzb = 0.0f;
+    float _gxb, _gyb, _gzb;
 
     // accel bias
-    float _axb = 0.0f;
-    float _ayb = 0.0f;
-    float _azb = 0.0f;
-
+    float _axb, _ayb, _azb;
     // accel scale factor
-    float _axs = 1.0f;
-    float _ays = 1.0f;
-    float _azs = 1.0f;
+    float _axs, _ays, _azs;
+
     // magnetometer bias and scale factor estimation
     float _deltaThresh = 0.3f;
     uint16_t _counter;
     float _framedelta, _delta;
 
     // mag bias
-    float _hxb = 0.0f;
-    float _hyb = 0.0f;
-    float _hzb = 0.0f;
-
+    float _hxb, _hyb, _hzb;
     // mag scale factor
-    float _hxs = 1.0f;
-    float _hys = 1.0f;
-    float _hzs = 1.0f;
+    float _hxs, _hys, _hzs;
+
     float _avgs;
     // transformation matrix
     /* transform the accel and gyro axes to match the magnetometer axes */
@@ -280,6 +270,10 @@ class MPU9250{
     int readAK8963Registers(uint8_t subAddress, uint8_t count, uint8_t* dest);
     int whoAmI();
     int whoAmIAK8963();
+
+    void resetAccelBiasAndScaleFactor();
+    void resetMagBiasAndScaleFactor();
+    void resetGyroBias();
 };
 
 class MPU9250FIFO: public MPU9250 {
