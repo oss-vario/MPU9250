@@ -156,30 +156,32 @@ class MPU9250{
     GyroRange _gyroRange;
     DlpfBandwidth _bandwidth;
     uint8_t _srd;
-    // gyro bias estimation
-    size_t _numSamples = 100;
 
+    // gyro bias
     float _gxb = 0.0f;
     float _gyb = 0.0f;
     float _gzb = 0.0f;
-    // accel bias and scale factor estimation
 
+    // accel bias
     float _axb = 0.0f;
     float _ayb = 0.0f;
     float _azb = 0.0f;
 
+    // accel scale factor
     float _axs = 1.0f;
     float _ays = 1.0f;
     float _azs = 1.0f;
     // magnetometer bias and scale factor estimation
-    uint16_t _maxCounts = 1000;
     float _deltaThresh = 0.3f;
-    uint8_t _coeff = 8;
     uint16_t _counter;
     float _framedelta, _delta;
 
+    // mag bias
+    float _hxb = 0.0f;
+    float _hyb = 0.0f;
+    float _hzb = 0.0f;
 
-    float _hxb, _hyb, _hzb;
+    // mag scale factor
     float _hxs = 1.0f;
     float _hys = 1.0f;
     float _hzs = 1.0f;

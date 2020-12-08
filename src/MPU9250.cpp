@@ -629,7 +629,7 @@ void MPU9250FIFO::getFifoTemperature_C(size_t *size,float* data) {
 
 /* estimates the gyro biases */
 int MPU9250::calibrateGyro() {
-  double _gxbD = 0, _gybD = 0, _gzbD = 0;
+  double _gxbD = 0.0, _gybD = 0.0, _gzbD = 0.0;
   // set the range, bandwidth, and srd
 
    // save to reset after calibration
@@ -647,12 +647,13 @@ int MPU9250::calibrateGyro() {
     return -3;
   }
 
-  // take samples and find bias
+  int _numSamples = 1000;
+  // take samples and calculate find bias
   for (size_t i=0; i < _numSamples; i++) {
     readSensor();
-    _gxbD += (getGyroX_rads() + _gxb)/((double)_numSamples);
-    _gybD += (getGyroY_rads() + _gyb)/((double)_numSamples);
-    _gzbD += (getGyroZ_rads() + _gzb)/((double)_numSamples);
+    _gxbD += getGyroX_rads()/((double)_numSamples);
+    _gybD += getGyroY_rads()/((double)_numSamples);
+    _gzbD += getGyroZ_rads()/((double)_numSamples);
     delay(20);
   }
   _gxb = (float)_gxbD;
@@ -706,10 +707,11 @@ void MPU9250::setGyroBiasZ_rads(float bias) {
 this should be run for each axis in each direction (6 total) to find
 the min and max values along each */
 int MPU9250::calibrateAccel() {
-  double _axbD=0, _aybD=0, _azbD=0;
+  double _axbD = 0.0f, _aybD = 0.0f, _azbD = 0.0f;
 
-  float _axmax = 0, _aymax = 0, _azmax = 0;
-  float _axmin = 0, _aymin = 0, _azmin = 0;
+  float _axmax = 0.0f, _aymax = 0.0f, _azmax = 0.0f;
+  float _axmin = 0.0f, _aymin = 0.0f, _azmin = 0.0f;
+
    // save to reset after calibration
   const AccelRange saved_accel_range = _accelRange;
   const DlpfBandwidth saved_bandwidth = _bandwidth;
@@ -726,14 +728,16 @@ int MPU9250::calibrateAccel() {
     return -3;
   }
 
+  int _numSamples = 1000;
   // take samples and find min / max
   for (size_t i=0; i < _numSamples; i++) {
     readSensor();
-    _axbD += (getAccelX_mss()/_axs + _axb)/((double)_numSamples);
-    _aybD += (getAccelY_mss()/_ays + _ayb)/((double)_numSamples);
-    _azbD += (getAccelZ_mss()/_azs + _azb)/((double)_numSamples);
+    _axbD += getAccelX_mss()/((double)_numSamples);
+    _aybD += getAccelY_mss()/((double)_numSamples);
+    _azbD += getAccelZ_mss()/((double)_numSamples);
     delay(20);
   }
+
   if (_axbD > 9.0f) {
     _axmax = (float)_axbD;
   }
@@ -831,9 +835,11 @@ void MPU9250::setAccelCalZ(float bias,float scaleFactor) {
 /* finds bias and scale factor calibration for the magnetometer,
 the sensor should be rotated in a figure 8 motion until complete */
 int MPU9250::calibrateMag() {
-  float _hxfilt = 0, _hyfilt = 0, _hzfilt = 0;
+  float _hxfilt = 0.0f, _hyfilt = 0.0f, _hzfilt = 0.0f;
   float _hxmax, _hymax, _hzmax;
   float _hxmin, _hymin, _hzmin;
+  float _coeff = 8.0;
+
    // save to reset after calibration
   const uint8_t saved_srd = _srd;
 
@@ -851,15 +857,16 @@ int MPU9250::calibrateMag() {
   _hzmax = getMagZ_uT();
   _hzmin = getMagZ_uT();
 
-  // collect data to find max / min in each channel
-  _counter = 0;
-  while (_counter < _maxCounts) {
+  uint16_t _maxCounts = 1000;
+
+  // take samples and calculate find bias
+  for (size_t _counter=0; _counter < _maxCounts; _counter++) {
     _delta = 0.0f;
     _framedelta = 0.0f;
     readSensor();
-    _hxfilt = (_hxfilt*((float)_coeff-1)+(getMagX_uT()/_hxs+_hxb))/((float)_coeff);
-    _hyfilt = (_hyfilt*((float)_coeff-1)+(getMagY_uT()/_hys+_hyb))/((float)_coeff);
-    _hzfilt = (_hzfilt*((float)_coeff-1)+(getMagZ_uT()/_hzs+_hzb))/((float)_coeff);
+    _hxfilt = (_hxfilt*(_coeff-1)+getMagX_uT())/(_coeff);
+    _hyfilt = (_hyfilt*(_coeff-1)+getMagY_uT())/(_coeff);
+    _hzfilt = (_hzfilt*(_coeff-1)+getMagZ_uT())/(_coeff);
     if (_hxfilt > _hxmax) {
       _delta = _hxfilt - _hxmax;
       _hxmax = _hxfilt;
