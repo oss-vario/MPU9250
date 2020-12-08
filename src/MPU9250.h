@@ -66,6 +66,9 @@ class MPU9250{
       LP_ACCEL_ODR_250HZ = 10,
       LP_ACCEL_ODR_500HZ = 11
     };
+    // constants
+    const float G = 9.807f;
+    const float _d2r = 3.14159265359f/180.0f;
     MPU9250(TwoWire &bus,uint8_t address);
     MPU9250(SPIClass &bus,uint8_t csPin);
     int begin();
@@ -191,9 +194,7 @@ class MPU9250{
     const int16_t tX[3] = {0,  1,  0};
     const int16_t tY[3] = {1,  0,  0};
     const int16_t tZ[3] = {0,  0, -1};
-    // constants
-    const float G = 9.807f;
-    const float _d2r = 3.14159265359f/180.0f;
+
     // MPU9250 registers
     const uint8_t ACCEL_OUT = 0x3B;
     const uint8_t GYRO_OUT = 0x43;
