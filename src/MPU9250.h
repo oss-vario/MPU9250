@@ -170,15 +170,12 @@ class MPU9250{
 
     // magnetometer bias and scale factor estimation
     float _deltaThresh = 0.3f;
-    uint16_t _counter;
-    float _framedelta, _delta;
 
     // mag bias
     float _hxb, _hyb, _hzb;
     // mag scale factor
     float _hxs, _hys, _hzs;
 
-    float _avgs;
     // transformation matrix
     /* transform the accel and gyro axes to match the magnetometer axes */
     const int16_t tX[3] = {0,  1,  0};

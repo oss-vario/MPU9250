@@ -870,6 +870,7 @@ int MPU9250::calibrateMag() {
   uint16_t _maxCounts = 1000;
 
   // take samples and calculate find bias
+  float _framedelta, _delta;
   for (size_t _counter=0; _counter < _maxCounts; _counter++) {
     _delta = 0.0f;
     _framedelta = 0.0f;
@@ -936,7 +937,7 @@ int MPU9250::calibrateMag() {
   _hxs = (_hxmax - _hxmin) / 2.0f;
   _hys = (_hymax - _hymin) / 2.0f;
   _hzs = (_hzmax - _hzmin) / 2.0f;
-  _avgs = (_hxs + _hys + _hzs) / 3.0f;
+  float _avgs = (_hxs + _hys + _hzs) / 3.0f;
   _hxs = _avgs/_hxs;
   _hys = _avgs/_hys;
   _hzs = _avgs/_hzs;
