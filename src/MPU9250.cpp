@@ -433,6 +433,13 @@ int MPU9250FIFO::enableFifo(bool accel,bool gyro,bool mag,bool temp) {
   return 1;
 }
 
+/* returns `1` if new data is available */
+int MPU9250::checkNewAccelGyroData() {
+  if (readRegisters(INT_STATUS, 1, _buffer) < 0) {
+    return -1;
+  }
+  return _buffer[0] & 0x01;
+}
 /* reads the most current data from MPU9250 and stores in buffer */
 int MPU9250::readSensor() {
   _useSPIHS = true; // use the high speed SPI for data readout

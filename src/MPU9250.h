@@ -79,6 +79,7 @@ class MPU9250{
     int enableDataReadyInterrupt();
     int disableDataReadyInterrupt();
     int enableWakeOnMotion(float womThresh_mg,LpAccelOdr odr);
+    int checkNewAccelGyroData();
     int readSensor();
     float getAccelX_mss();
     float getAccelY_mss();
@@ -212,6 +213,7 @@ class MPU9250{
     const uint8_t GYRO_DLPF_10 = 0x05;
     const uint8_t GYRO_DLPF_5 = 0x06;
     const uint8_t SMPDIV = 0x19;
+    const uint8_t INT_STATUS = 0x3A;
     const uint8_t INT_PIN_CFG = 0x37;
     const uint8_t INT_ENABLE = 0x38;
     const uint8_t INT_DISABLE = 0x00;
