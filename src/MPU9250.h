@@ -177,12 +177,6 @@ class MPU9250{
     // mag scale factor
     float _hxs, _hys, _hzs;
 
-    // transformation matrix
-    /* transform the accel and gyro axes to match the magnetometer axes */
-    const int16_t tX[3] = {0,  1,  0};
-    const int16_t tY[3] = {1,  0,  0};
-    const int16_t tZ[3] = {0,  0, -1};
-
     // MPU9250 registers
     const uint8_t ACCEL_OUT = 0x3B;
     const uint8_t GYRO_OUT = 0x43;

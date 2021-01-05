@@ -459,12 +459,12 @@ int MPU9250::readSensor() {
   _hycounts = (((int16_t)_buffer[17]) << 8) | _buffer[16];
   _hzcounts = (((int16_t)_buffer[19]) << 8) | _buffer[18];
   // transform and convert to float values
-  _ax = (((float)(tX[0]*_axcounts + tX[1]*_aycounts + tX[2]*_azcounts) * _accelScale) - _axb)*_axs;
-  _ay = (((float)(tY[0]*_axcounts + tY[1]*_aycounts + tY[2]*_azcounts) * _accelScale) - _ayb)*_ays;
-  _az = (((float)(tZ[0]*_axcounts + tZ[1]*_aycounts + tZ[2]*_azcounts) * _accelScale) - _azb)*_azs;
-  _gx = ((float)(tX[0]*_gxcounts + tX[1]*_gycounts + tX[2]*_gzcounts) * _gyroScale) - _gxb;
-  _gy = ((float)(tY[0]*_gxcounts + tY[1]*_gycounts + tY[2]*_gzcounts) * _gyroScale) - _gyb;
-  _gz = ((float)(tZ[0]*_gxcounts + tZ[1]*_gycounts + tZ[2]*_gzcounts) * _gyroScale) - _gzb;
+  _ax = (((float)(_axcounts + _aycounts + _azcounts) * _accelScale) - _axb)*_axs;
+  _ay = (((float)(_axcounts + _aycounts + _azcounts) * _accelScale) - _ayb)*_ays;
+  _az = (((float)(_axcounts + _aycounts + _azcounts) * _accelScale) - _azb)*_azs;
+  _gx = ((float)(_gxcounts + _gycounts + _gzcounts) * _gyroScale) - _gxb;
+  _gy = ((float)(_gxcounts + _gycounts + _gzcounts) * _gyroScale) - _gyb;
+  _gz = ((float)(_gxcounts + _gycounts + _gzcounts) * _gyroScale) - _gzb;
   _hx = (((float)(_hxcounts) * _magScaleX) - _hxb)*_hxs;
   _hy = (((float)(_hycounts) * _magScaleY) - _hyb)*_hys;
   _hz = (((float)(_hzcounts) * _magScaleZ) - _hzb)*_hzs;
@@ -540,9 +540,9 @@ int MPU9250FIFO::readFifo() {
       _aycounts = (((int16_t)_buffer[2]) << 8) | _buffer[3];
       _azcounts = (((int16_t)_buffer[4]) << 8) | _buffer[5];
       // transform and convert to float values
-      _axFifo[i] = (((float)(tX[0]*_axcounts + tX[1]*_aycounts + tX[2]*_azcounts) * _accelScale)-_axb)*_axs;
-      _ayFifo[i] = (((float)(tY[0]*_axcounts + tY[1]*_aycounts + tY[2]*_azcounts) * _accelScale)-_ayb)*_ays;
-      _azFifo[i] = (((float)(tZ[0]*_axcounts + tZ[1]*_aycounts + tZ[2]*_azcounts) * _accelScale)-_azb)*_azs;
+      _axFifo[i] = (((float)(_axcounts + _aycounts + _azcounts) * _accelScale)-_axb)*_axs;
+      _ayFifo[i] = (((float)(_axcounts + _aycounts + _azcounts) * _accelScale)-_ayb)*_ays;
+      _azFifo[i] = (((float)(_axcounts + _aycounts + _azcounts) * _accelScale)-_azb)*_azs;
       _aSize = _fifoSize/_fifoFrameSize;
     }
     if (_enFifoTemp) {
@@ -558,9 +558,9 @@ int MPU9250FIFO::readFifo() {
       _gycounts = (((int16_t)_buffer[2 + _enFifoAccel*6 + _enFifoTemp*2]) << 8) | _buffer[3 + _enFifoAccel*6 + _enFifoTemp*2];
       _gzcounts = (((int16_t)_buffer[4 + _enFifoAccel*6 + _enFifoTemp*2]) << 8) | _buffer[5 + _enFifoAccel*6 + _enFifoTemp*2];
       // transform and convert to float values
-      _gxFifo[i] = ((float)(tX[0]*_gxcounts + tX[1]*_gycounts + tX[2]*_gzcounts) * _gyroScale) - _gxb;
-      _gyFifo[i] = ((float)(tY[0]*_gxcounts + tY[1]*_gycounts + tY[2]*_gzcounts) * _gyroScale) - _gyb;
-      _gzFifo[i] = ((float)(tZ[0]*_gxcounts + tZ[1]*_gycounts + tZ[2]*_gzcounts) * _gyroScale) - _gzb;
+      _gxFifo[i] = ((float)(_gxcounts + _gycounts + _gzcounts) * _gyroScale) - _gxb;
+      _gyFifo[i] = ((float)(_gxcounts + _gycounts + _gzcounts) * _gyroScale) - _gyb;
+      _gzFifo[i] = ((float)(_gxcounts + _gycounts + _gzcounts) * _gyroScale) - _gzb;
       _gSize = _fifoSize/_fifoFrameSize;
     }
     if (_enFifoMag) {
